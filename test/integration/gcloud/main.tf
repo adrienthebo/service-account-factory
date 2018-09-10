@@ -1,3 +1,16 @@
+variable "project_id" {
+  description = "The project ID to use for integration tests"
+}
+
+variable "credentials_path" {
+  description = "Service account credentials for `project_id with permissions to manage service accounts and permissions"
+}
+
+variable "shared_vpc_subnets" {
+  type = "list"
+  default = []
+}
+
 provider "google" {
   credentials = "${file(var.credentials_path)}"
 }
@@ -25,4 +38,6 @@ module "service-accounts" {
       roles          = []
     },
   ]
+
+  shared_vpc_subnets = "${var.shared_vpc_subnets}"
 }

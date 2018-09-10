@@ -26,10 +26,32 @@ function activate_config() {
   source config.sh
 }
 
+function make_tfvars() {
+  cat <<EOT > terraform.tfvars
+project_id="${PROJECT_ID}"
+credentials_path="${CREDENTIALS_PATH}"
+EOT
+
+  if [ -n "${SHARED_VPC_SUBNETS}" ]; then
+    echo "shared vpc subnets: $SHARED_VPC_SUBNETS"
+
+    echo "shared_vpc_subnets = [" >> terraform.tfvars
+    subnets=
+    IFS=":" read -a subnets -r <<< "$SHARED_VPC_SUBNETS"
+    for subnet in "${subnets[@]}"; do
+      echo "subnet: $subnet"
+      echo "  \"$subnet\"," >> terraform.tfvars
+    done
+    echo "]" >> terraform.tfvars
+  fi
+
+}
+
 # Preparing environment
 make_testdir
 cd "$TEMPDIR" || exit
 activate_config
+make_tfvars
 
 terraform init
 terraform apply -input=false -auto-approve

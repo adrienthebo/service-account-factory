@@ -38,3 +38,20 @@ resource "null_resource" "service_accounts_role_granting" {
 
   depends_on = ["google_service_account.project_service_accounts"]
 }
+
+resource "null_resource" "service_accounts_vpc_subnets_sharing" {
+  provisioner "local-exec" {
+    command = "bash ${path.module}/scripts/service_accounts_vpc_subnets_sharing.sh '${jsonencode(var.service_accounts)}' '${var.project_id}' '${jsonencode(var.shared_vpc_subnets)}' '${var.credentials_path}' add"
+  }
+
+  provisioner "local-exec" {
+    command = "bash ${path.module}/scripts/service_accounts_vpc_subnets_sharing.sh '${jsonencode(var.service_accounts)}' '${var.project_id}' '${jsonencode(var.shared_vpc_subnets)}' '${var.credentials_path}' destroy"
+    when    = "destroy"
+  }
+
+  triggers {
+      service_accounts = "${jsonencode(var.service_accounts)}"
+  }
+
+  depends_on = ["google_service_account.project_service_accounts", "null_resource.service_accounts_role_granting"]
+}

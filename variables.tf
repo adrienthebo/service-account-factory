@@ -28,3 +28,9 @@ variable "credentials_path" {
   type        = "string"
   description = "Credentials for managing service accounts"
 }
+
+variable "shared_vpc_subnets" {
+  type        = "list"
+  description = "Shared VPC subnets that service accounts with network access will be able to manage"
+  default     = []
+}
