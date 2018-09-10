@@ -30,6 +30,8 @@ function make_tfvars() {
   cat <<EOT > terraform.tfvars
 project_id="${PROJECT_ID}"
 credentials_path="${CREDENTIALS_PATH}"
+organization_id="${ORGANIZATION_ID}"
+impersonated_user_email="${IMPERSONATED_USER_EMAIL}"
 EOT
 
   if [ -n "${SHARED_VPC_SUBNETS}" ]; then

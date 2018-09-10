@@ -56,3 +56,20 @@ resource "null_resource" "service_accounts_vpc_subnets_sharing" {
 
   depends_on = ["google_service_account.project_service_accounts", "null_resource.service_accounts_role_granting"]
 }
+
+resource "null_resource" "service_accounts_groups_membership" {
+  provisioner "local-exec" {
+    command = "python3 ${path.module}/scripts/service_accounts_group_membership.py --service_accounts '${jsonencode(var.service_accounts)}' --project_id '${var.project_id}' --path '${var.credentials_path}' --email '${var.impersonated_user_email}' --action add"
+  }
+
+  provisioner "local-exec" {
+    command = "python3 ${path.module}/scripts/service_accounts_group_membership.py --service_accounts '${jsonencode(var.service_accounts)}' --project_id '${var.project_id}' --path '${var.credentials_path}' --email '${var.impersonated_user_email}' --action destroy"
+    when    = "destroy"
+  }
+
+  triggers {
+      service_accounts = "${jsonencode(var.service_accounts)}"
+  }
+
+  depends_on = ["google_service_account.project_service_accounts"]
+}
