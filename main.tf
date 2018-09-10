@@ -50,7 +50,8 @@ resource "null_resource" "service_accounts_vpc_subnets_sharing" {
   }
 
   triggers {
-      service_accounts = "${jsonencode(var.service_accounts)}"
+      service_accounts   = "${jsonencode(var.service_accounts)}"
+      shared_vpc_subnets = "${jsonencode(var.shared_vpc_subnets)}"
   }
 
   depends_on = ["google_service_account.project_service_accounts", "null_resource.service_accounts_role_granting"]
