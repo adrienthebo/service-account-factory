@@ -13,3 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
+resource "google_service_account" "project_service_accounts" {
+  count = "${length(var.service_accounts)}"
+
+  account_id   = "${lookup(var.service_accounts[count.index], "account_id")}"
+  display_name = "${lookup(var.service_accounts[count.index], "description")}"
+  project      = "${var.project_id}"
+}
