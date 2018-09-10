@@ -68,6 +68,11 @@ check_headers:
 test_integration:
 	./test/integration/gcloud/run.sh
 
+# Integration tests
+.PHONY: test_examples
+test_examples:
+	bats test/examples/
+
 .PHONY: generate_docs
 generate_docs:
 	@source test/make.sh && generate_docs
