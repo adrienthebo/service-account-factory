@@ -3,8 +3,9 @@ provider "google" {
 }
 
 module "service-accounts" {
-  source = "../../../"
-  project_id = "${var.project_id}"
+  source           = "../../../"
+  project_id       = "${var.project_id}"
+  credentials_path = "${var.credentials_path}"
   service_accounts = [
     {
       account_id     = "editor-service-account"

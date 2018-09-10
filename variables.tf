@@ -23,3 +23,8 @@ variable "service_accounts" {
   type        = "list"
   description = "A list of service accounts to create"
 }
+
+variable "credentials_path" {
+  type        = "string"
+  description = "Credentials for managing service accounts"
+}

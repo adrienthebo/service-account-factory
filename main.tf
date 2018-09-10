@@ -21,3 +21,20 @@ resource "google_service_account" "project_service_accounts" {
   display_name = "${lookup(var.service_accounts[count.index], "description")}"
   project      = "${var.project_id}"
 }
+
+resource "null_resource" "service_accounts_role_granting" {
+  provisioner "local-exec" {
+    command = "${path.module}/scripts/service_accounts_role_granting.sh '${jsonencode(var.service_accounts)}' '${var.project_id}' '${var.credentials_path}' add"
+  }
+
+  provisioner "local-exec" {
+    command = "${path.module}/scripts/service_accounts_role_granting.sh '${jsonencode(var.service_accounts)}' '${var.project_id}' '${var.credentials_path}' destroy"
+    when    = "destroy"
+  }
+
+  triggers {
+      service_accounts = "${jsonencode(var.service_accounts)}"
+  }
+
+  depends_on = ["google_service_account.project_service_accounts"]
+}

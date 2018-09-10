@@ -35,8 +35,9 @@ module "project-factory" {
 }
 
 module "service-accounts" {
-  source = "../../"
-  project_id = "${module.project-factory.project_id}"
+  source           = "../../"
+  project_id       = "${module.project-factory.project_id}"
+  credentials_path = "${var.credentials_path}"
   service_accounts = [
     {
       account_id     = "editor-service-account"
